@@ -7,7 +7,7 @@ Run the install script, it will download the dependencies via pip and compile th
 
 #operation
 
-Bacrawler analyses 10X geneomics bam files, and collect metrics such as molecule lenght, number of barcodes, coverage of the haplotypes etc. Barcrawler generates a feww histograms and plots of the coverage aswell.
+Bacrawler analyses 10X genomics bam files, and collect metrics such as molecule length, number of barcodes, coverage of the haplotypes etc. Barcrawler generates a histograms and plots of the coverage, as well as text files.
 
 #Running
 
