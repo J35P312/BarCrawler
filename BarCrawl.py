@@ -1,6 +1,7 @@
 import BarLib
 import argparse
 import os
+import gzip
 
 parser = argparse.ArgumentParser("""BarCrawler - analysis package for 10X genomics linked reads data""")
 parser.add_argument('--coverage',action="store_true",help="Analyse the coverage of a 10X genomics bam file")
@@ -27,8 +28,8 @@ if args.coverage:
 elif args.pssearch:
     parser = argparse.ArgumentParser("""BarCrawler - analysis package for 10X genomics linked reads data""")
     parser.add_argument('--pssearch',action="store_true",help="test if the ps of a sample(A) is found in another sample (B)")
-    parser.add_argument('--vcfa',required=True,type=str,help="the vcf of sample A. This sample should contain the PS of interest")
-    parser.add_argument('--vcfb',required=True,type=str,help="The vcf of sample B. This sample will be searched for variants similar to the ps of sample A")
+    parser.add_argument('--vcfa',required=True,type=str,help="the (gzipped) vcf of sample A. This sample should contain the PS of interest")
+    parser.add_argument('--vcfb',required=True,type=str,help="The (gzipped) vcf of sample B. This sample will be searched for variants similar to the ps of sample A")
     parser.add_argument('--ps',required=True,type=str,help="the phase set (PS) of interest")
     args = parser.parse_args()
 
@@ -40,7 +41,7 @@ elif args.pssearch:
     startps=0
     endps=0
 
-    for line in open(args.vcfa):
+    for line in gzip.open(args.vcfa):
         if line[0] == "#":
             continue
     
@@ -76,7 +77,7 @@ elif args.pssearch:
 
     psb={}
     snvsb=0
-    for line in open(args.vcfb):
+    for line in gzip.open(args.vcfb):
 
         #skip header
         if line[0] == "#" or "HAPLOCALLED=0" in line:
