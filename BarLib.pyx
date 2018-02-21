@@ -2,6 +2,8 @@ import sys
 import os
 import numpy
 import math
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 import scipy.signal
