@@ -3,7 +3,7 @@ import argparse
 import os
 import gzip
 
-parser = argparse.ArgumentParser("""BarCrawler - analysis package for 10X genomics linked reads data""")
+parser = argparse.ArgumentParser("""BarCrawler - analysis package for 10X genomics linked reads data""",add_help=False)
 parser.add_argument('--coverage',action="store_true",help="Analyse the coverage of a 10X genomics bam file")
 parser.add_argument('--pssearch',action="store_true",help="test if the ps of a sample is found in another sample")
 args, unknown = parser.parse_known_args()

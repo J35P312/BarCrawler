@@ -124,6 +124,7 @@ def generate_coverage_plot(args):
 
         content=line.strip().split()
         if not chromosome or content[0] != chromosome:
+            print chromosome
             chromosome=content[0]
             i=0
         coverage_structure["total_coverage"][content[0]][i]=float(content[-4])
@@ -131,8 +132,17 @@ def generate_coverage_plot(args):
         coverage_structure["2"][content[0]][i]=float(content[-2])
         i+=1
 
+    coverage_values=[]
     for chromosome in coverage_structure["total_coverage"]:
-        if "chrUn" in chromosome or "gl0" in chromosome:
+        for i in range(0,len(coverage_structure["total_coverage"])):
+            if coverage_structure["total_coverage"][i]:
+               coverage_values.append(coverage_structure["total_coverage"][i])
+
+
+    median_coverage=numpy.median(coverage_values)
+
+    for chromosome in coverage_structure["total_coverage"]:
+        if "chrUn" in chromosome or "gl0" in chromosome or "KI" in chromosome:
             continue
         total_cov = scipy.signal.medfilt(coverage_structure["total_coverage"][chromosome],args.medfilt)
         h1 = scipy.signal.medfilt(coverage_structure["1"][chromosome],args.medfilt)
@@ -144,12 +154,11 @@ def generate_coverage_plot(args):
         no_hap=total_cov-h1-h2
 
         total_cov[total_cov > 3*median_coverage] = median_coverage*3
-        h1[h1 > 3*median_coverage] = 3*median_coverage
-        h2[h2 > 3*median_coverage] =3*median_coverage
-        no_hap[no_hap > 3*median_coverage] = 3*median_coverage
+        h1[h1 > 4*median_coverage] = 3*median_coverage
+        h2[h2 > 4*median_coverage] =3*median_coverage
+        no_hap[no_hap > 4*median_coverage] = 3*median_coverage
 
 
-        median_coverage=numpy.median(total_cov)
         median_no_hap=numpy.median(no_hap)
 
         plt.figure(1)
@@ -163,7 +172,7 @@ def generate_coverage_plot(args):
 
         plt.legend([total,non_haplotyped,total_line,non_haplotyped_line], ["Total", "Non-haplotyped","Median Total", "Median Non-haplotyped"])
 
-        plt.ylim(ymax = 3*median_coverage, ymin = 0)
+        plt.ylim(ymax = 4*median_coverage, ymin = 0)
         plt.title('Coverage on chromosome {}'.format(chromosome))
 
        
@@ -339,7 +348,7 @@ def compute_coverage(args):
     f.write("#chromosome\tstart\tend\tMI\tBX\tHP\tn_reads\n")
 
     chromosome_order=[]
-    with os.popen("samtools view -h {}".format(args.bam)) as pipe:
+    with os.popen("samtools view -h -F 2048 -F 256 {}".format(args.bam)) as pipe:
         for line in pipe:
             if line[0] == "@":
                 if "SN:" in line:
