@@ -134,9 +134,9 @@ def generate_coverage_plot(args):
 
     coverage_values=[]
     for chromosome in coverage_structure["total_coverage"]:
-        for i in range(0,len(coverage_structure["total_coverage"])):
-            if coverage_structure["total_coverage"][i]:
-               coverage_values.append(coverage_structure["total_coverage"][i])
+        for i in range(0,len( coverage_structure["total_coverage"][chromosome] )):
+            if coverage_structure["total_coverage"][chromosome][i]:
+               coverage_values.append(coverage_structure["total_coverage"][chromosome][i])
 
 
     median_coverage=numpy.median(coverage_values)
