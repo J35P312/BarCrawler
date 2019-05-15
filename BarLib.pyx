@@ -144,19 +144,19 @@ def generate_coverage_plot(args):
     for chromosome in coverage_structure["total_coverage"]:
         if "chrUn" in chromosome or "gl0" in chromosome or "KI" in chromosome:
             continue
+
         total_cov = scipy.signal.medfilt(coverage_structure["total_coverage"][chromosome],args.medfilt)
         h1 = scipy.signal.medfilt(coverage_structure["1"][chromosome],args.medfilt)
         h2 = scipy.signal.medfilt(coverage_structure["2"][chromosome],args.medfilt)
 
-        median_coverage=numpy.median(coverage_structure["total_coverage"][chromosome])
         posvector=numpy.array( range(0,len(coverage_structure["1"][chromosome])))*args.bin_size/1000
 
         no_hap=total_cov-h1-h2
 
-        total_cov[total_cov > 3*median_coverage] = median_coverage*3
-        h1[h1 > 4*median_coverage] = 3*median_coverage
-        h2[h2 > 4*median_coverage] =3*median_coverage
-        no_hap[no_hap > 4*median_coverage] = 3*median_coverage
+        total_cov[total_cov > 4*median_coverage] = median_coverage*4
+        h1[h1 > 4*median_coverage] = 4*median_coverage
+        h2[h2 > 4*median_coverage] =4*median_coverage
+        no_hap[no_hap > 4*median_coverage] = 4*median_coverage
 
 
         median_no_hap=numpy.median(no_hap)
